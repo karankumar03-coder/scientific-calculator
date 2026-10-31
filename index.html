@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#080a10" />
+  <meta name="description" content="A scientific calculator with trigonometry, logarithms, factorials, memory and history." />
+  <title>Scientific Calculator</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23141824'/%3E%3Ctext x='32' y='45' font-size='36' text-anchor='middle' fill='%237c6cff' font-family='Segoe UI, sans-serif'%3E%E2%88%91%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="shell" id="shell">
+    <div class="calculator">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand__mark" aria-hidden="true">∑</span>
+          <span class="brand__name">Scientific</span>
+        </div>
+        <div class="topbar__actions">
+          <button type="button" class="chip chip--angle" id="angle-toggle" aria-label="Angle unit: degrees. Click to switch.">DEG</button>
+          <button type="button" class="icon-btn" id="history-toggle" aria-label="Toggle history" aria-expanded="true" aria-controls="history-panel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+              <path d="M3 3v5h5" />
+              <path d="M12 7v5l3 2" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="display" aria-label="Calculator display">
+        <div class="display__meta">
+          <span class="badge" id="memory-badge" aria-hidden="true" title="Memory empty">M</span>
+        </div>
+        <div class="display__screen">
+          <div class="display__history" id="history-line"></div>
+          <div class="display__expr" id="expr-line">0</div>
+          <div class="display__preview" id="preview-line" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section class="keypad" id="keypad" aria-label="Calculator keypad">
+        <button type="button" class="key key--util" data-action="second" id="second-key" aria-pressed="false">2nd</button>
+        <button type="button" class="key key--util" data-action="memory-clear" aria-label="Memory clear">MC</button>
+        <button type="button" class="key key--util" data-action="memory-recall" aria-label="Memory recall">MR</button>
+        <button type="button" class="key key--util" data-action="memory-add" aria-label="Memory add">M+</button>
+        <button type="button" class="key key--util" data-action="memory-sub" aria-label="Memory subtract">M−</button>
+
+        <button type="button" class="key key--fn" data-value="sin(" data-alt-value="asin(" data-alt-label="sin⁻¹" aria-label="Sine">sin</button>
+        <button type="button" class="key key--fn" data-value="cos(" data-alt-value="acos(" data-alt-label="cos⁻¹" aria-label="Cosine">cos</button>
+        <button type="button" class="key key--fn" data-value="tan(" data-alt-value="atan(" data-alt-label="tan⁻¹" aria-label="Tangent">tan</button>
+        <button type="button" class="key key--fn" data-value="^" aria-label="Power">xʸ</button>
+        <button type="button" class="key key--fn" data-value="sqrt(" data-alt-value="cbrt(" data-alt-label="∛" aria-label="Square root">√</button>
+
+        <button type="button" class="key key--fn" data-value="^2" data-alt-value="^3" data-alt-label="x³" aria-label="Squared">x²</button>
+        <button type="button" class="key key--fn" data-value="ln(" data-alt-value="exp(" data-alt-label="eˣ" aria-label="Natural logarithm">ln</button>
+        <button type="button" class="key key--fn" data-value="log(" data-alt-value="10^(" data-alt-label="10ˣ" aria-label="Logarithm base 10">log</button>
+        <button type="button" class="key key--fn" data-value="pi" aria-label="Pi">π</button>
+        <button type="button" class="key key--fn" data-value="e" aria-label="Euler's number">e</button>
+
+        <button type="button" class="key key--fn" data-value="(" aria-label="Open parenthesis">(</button>
+        <button type="button" class="key key--fn" data-value=")" aria-label="Close parenthesis">)</button>
+        <button type="button" class="key key--fn" data-value="!" aria-label="Factorial">n!</button>
+        <button type="button" class="key key--fn" data-value="inv(" aria-label="Reciprocal">1/x</button>
+        <button type="button" class="key key--fn" data-value="%" aria-label="Percent">%</button>
+
+        <button type="button" class="key key--num" data-value="7">7</button>
+        <button type="button" class="key key--num" data-value="8">8</button>
+        <button type="button" class="key key--num" data-value="9">9</button>
+        <button type="button" class="key key--op" data-value="÷" aria-label="Divide">÷</button>
+        <button type="button" class="key key--danger" data-action="backspace" aria-label="Backspace">⌫</button>
+
+        <button type="button" class="key key--num" data-value="4">4</button>
+        <button type="button" class="key key--num" data-value="5">5</button>
+        <button type="button" class="key key--num" data-value="6">6</button>
+        <button type="button" class="key key--op" data-value="×" aria-label="Multiply">×</button>
+        <button type="button" class="key key--danger" data-action="clear" aria-label="Clear">C</button>
+
+        <button type="button" class="key key--num" data-value="1">1</button>
+        <button type="button" class="key key--num" data-value="2">2</button>
+        <button type="button" class="key key--num" data-value="3">3</button>
+        <button type="button" class="key key--op" data-value="−" aria-label="Subtract">−</button>
+        <button type="button" class="key key--fn" data-value="ans" aria-label="Last answer">Ans</button>
+
+        <button type="button" class="key key--fn" data-action="sign" aria-label="Toggle sign">±</button>
+        <button type="button" class="key key--num" data-value="0">0</button>
+        <button type="button" class="key key--num" data-value=".">.</button>
+        <button type="button" class="key key--op" data-value="+" aria-label="Add">+</button>
+        <button type="button" class="key key--equals" data-action="equals" aria-label="Equals">=</button>
+      </section>
+    </div>
+
+    <aside class="history" id="history-panel" aria-label="Calculation history">
+      <div class="history__head">
+        <h2>History</h2>
+        <button type="button" class="chip chip--ghost" id="clear-history">Clear</button>
+      </div>
+      <ul class="history__list" id="history-list"></ul>
+      <p class="history__empty" id="history-empty">Your calculations will appear here.<br />Tap one to reuse the result.</p>
+    </aside>
+  </div>
+
+  <div class="history-backdrop" id="history-backdrop"></div>
+
+  <noscript>This calculator needs JavaScript enabled.</noscript>
+
+  <script src="calc.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
